@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "vocabaqdata"
+version = "0.1.0"
+description = "pPeparation of various datasets relevant to modelling vocabulary with an eye towards modelling receptive vocabulary inventories"
+authors = ["Frankie Robertson <frankie@robertson.name>"]
+license = "Apache-v2"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+wordfreq = "^2.5.0"
+snakemake = "^6.5.1"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

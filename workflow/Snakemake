@@ -1,0 +1,144 @@
+from os.path import join as pjoin
+
+
+def cnf(name, val):
+    globals()[name] = config.setdefault(name, val)
+
+
+# URLS
+cnf("EVKD1_TEST_QUESTIONS_PDF", "https://www.victoria.ac.nz/lals/about/staff/publications/paul-nation/VST-version-A.pdf")
+cnf("EVKD1_TEST_ANSWERS_PDF", "https://www.victoria.ac.nz/lals/about/staff/publications/paul-nation/VST-version-A_answers.pdf")
+
+# Inputs
+cnf("SVL12K_RAW", "/does/not/exist")
+cnf("EVKD1_RAW", "/does/not/exist")
+cnf("TESTYOURVOCAB_NATIVE_RAW", "/does/not/exist")
+cnf("TESTYOURVOCAB_NONNATIVE_RAW", "/does/not/exist")
+
+# Directories
+cnf("WORK", "work")
+
+# Dependencies
+cnf("BINEXTRA", pjoin(WORK, "bin"))
+cnf("DUCKDB_URL", "https://github.com/cwida/duckdb/releases/download/v0.2.5/duckdb_cli-linux-amd64.zip")
+cnf("TABULA_URL", "https://github.com/tabulapdf/tabula-java/releases/download/v1.0.4/tabula-1.0.4-jar-with-dependencies.jar")
+cnf("DUCKDB_BIN", pjoin(BINEXTRA, "duckdb"))
+cnf("TABULA_JAR", pjoin(BINEXTRA, "tabula.jar"))
+
+# Intermediates
+cnf("SVL12K_DF", pjoin(WORK, "ehara_svl12k.parquet"))
+cnf("SVL12K_LIST", pjoin(WORK, "svl12k_wordlist.txt"))
+cnf("TESTYOURVOCAB_NATIVE_DB", pjoin(WORK, "testyourvocab.native.db"))
+cnf("TESTYOURVOCAB_NONNATIVE_DB", pjoin(WORK, "testyourvocab.nonnative.db"))
+cnf("TESTYOURVOCAB_LIST", pjoin(WORK, "testyourvocab_wordlist.txt"))
+cnf("EVKD1_TEST_QUESTIONS", pjoin(WORK, "evkd1_test_questions.txt"))
+cnf("EVKD1_TEST_ANSWERS", pjoin(WORK, "evkd1_test_answers.txt"))
+cnf("EVKD1_TEST_ANSWERS_DF", pjoin(WORK, "evkd1_test_answers.parquet"))
+cnf("EVKD1_RESP_DF", pjoin(WORK, "evkd1_resp.parquet"))
+
+
+rule all:
+    input:
+        (
+            ([rules.all_svl12k.output] if SVL12K_RAW != "/does/not/exist" else []) +
+            ([EVKD1_TEST_ANSWERS_DF, EVKD1_RESP_DF] if EVKD1_RAW != "/does/not/exist" else [])
+        )
+    run:
+        for filename in input:
+            print(filename)
+
+
+rule all_svl12k:
+    input:
+        SVL12K_DF, SVL12K_DF
+    output:
+        touch(pjoin(WORK, ".svl12k_all"))
+
+
+## Dependencies
+rule get_duckdb:
+    output:
+        DUCKDB_BIN
+    shell:
+        "mkdir -p " + BINEXTRA + " && " +
+        "cd " + BINEXTRA + " && " +
+        "wget " + DUCKDB_URL + " -O duckdb.zip  && " +
+        "unzip duckdb.zip && " +
+        "rm duckdb.zip"
+
+
+rule get_tabula:
+    output:
+        TABULA_JAR
+    shell:
+        "mkdir -p " + BINEXTRA + " && " +
+        "cd " + BINEXTRA + " && " +
+        "wget " + TABULA_URL + " -O " + TABULA_JAR
+
+
+## Importers
+
+### SVL12K
+rule import_ehara_svl12k:
+    input:
+        SVL12K_RAW
+    output:
+        SVL12K_DF
+    shell:
+        "python -m vocabaqdata.importers.ehara_svl12k {input} {output}"
+
+
+rule import_testyourvocab_nonnative:
+    input:
+        users = pjoin(TESTYOURVOCAB_NONNATIVE_RAW, "users_nonnative.tsv"),
+        answers = pjoin(TESTYOURVOCAB_NONNATIVE_RAW, "users_nonnative_answers.tsv"),
+        ranks = pjoin(TESTYOURVOCAB_NONNATIVE_RAW, "ranks.tsv"),
+    output:
+        TESTYOURVOCAB_NONNATIVE_DB
+    shell:
+        "bash ./vocabaqdata/importers/testyourvocab_nonnative.sh {input.users} {input.answers} {input.ranks} {output}"
+
+
+### EVKD1
+rule evkd1_test_qa:
+    output:
+        EVKD1_TEST_QUESTIONS,
+        EVKD1_TEST_ANSWERS
+    shell:
+        "wget -O " + EVKD1_TEST_QUESTIONS + ".pdf " + EVKD1_TEST_QUESTIONS_PDF + " && " +
+        "wget -O " + EVKD1_TEST_ANSWERS + ".pdf " + EVKD1_TEST_ANSWERS_PDF + " && " +
+        "java -jar " + TABULA_JAR +
+        " " + EVKD1_TEST_QUESTIONS + ".pdf --pages all --stream > " +
+        EVKD1_TEST_QUESTIONS + " && " +
+        "java -jar " + TABULA_JAR +
+        " " + EVKD1_TEST_ANSWERS + ".pdf --pages all --stream > " +
+        EVKD1_TEST_ANSWERS
+
+
+rule evkd1_convert_gold_answers:
+    input:
+        EVKD1_TEST_ANSWERS
+    output:
+        EVKD1_TEST_ANSWERS_DF
+    shell:
+        "python -m vocabaqdata.importers.evkd1_test_answers {input} {output}"
+
+
+rule evkd1_process_responses:
+    input:
+        resp = EVKD1_RAW,
+        gold = EVKD1_TEST_ANSWERS_DF
+    output:
+        EVKD1_RESP_DF
+    shell:
+        "python -m vocabaqdata.importers.evkd1 {input.resp} {input.gold} {output}"
+
+
+## Processing
+rule mk_ehara_svl12k_wordlist:
+    input:
+        SVL12K_DF
+    output:
+        SVL12K_LIST
+    shell:
+        "python -m vocabaqdata.proc.extract_wordlist_from_resps {input} {output}"

@@ -1,6 +1,10 @@
-## Vocabulary knowledge datasets
+# Vocabulary acquisition datasets
 
-### Vocabulary inventory datasets
+This repository contains a Snakemake workflow to do some preparation of various
+datasets relevant to modelling vocabulary with an eye towards modelling
+receptive vocabulary inventories. It can also do some enrichment of the data.
+
+## Vocabulary inventory datasets
 
 These datasets 
 
@@ -13,13 +17,13 @@ L2Ls = 2nd language learners
 | EVKD1 | English | Multiple choice (4) definitions from word in context | 100 from the XXX vocabulary size test | 100 L2Ls mainly based in Japan | [Personal website](http://yoehara.com/EVKD1/) (currently broken; direct request via email)
 | TestYourVocab | English | Self-assessed yes/no | ~90-160 per participant from bank of 616 | >1 627 968 L1Ls, >5 772 534 L2Ls from around the word | Direct request via email
 
-### Relevant word features
+## Relevant word features
 
 These datasets include features of words which are highly relevant to
 vocabulary inventory modelling. The most important beyond frequency, which is
 not covered here are age of acquisition and concreteness.
 
-### TODO:
+## TODO:
 
 https://www.iris-database.org/iris/app/home/detail?id=york%3a938002&ref=search
 
