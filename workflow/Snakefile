@@ -1,4 +1,5 @@
 from os.path import join as pjoin
+from itertools import chain
 
 
 def cnf(name, val):
@@ -37,20 +38,56 @@ cnf("EVKD1_TEST_ANSWERS_DF", pjoin(WORK, "evkd1_test_answers.parquet"))
 cnf("EVKD1_RESP_DF", pjoin(WORK, "evkd1_resp.parquet"))
 
 
+class Dataset:
+    def __init__(self, name, src_name, output):
+        self.name = name
+        self.src_name = src_name
+        self.src = globals()[src_name]
+        self._output = output
+
+    def _available(self):
+        return self.src != "/does/not/exist"
+
+    @property
+    def output(self):
+        if self._available():
+            return [self._output]
+        else:
+            return []
+
+    def __str__(self):
+        if self._available():
+            stat = "YES"
+        else:
+            stat = f"NO (pass -C {self.src_name} to build)"
+        return "{:>30} {}".format(self.name, stat)
+
+
+def all_input(wc):
+    print(" *** ")
+    print()
+    for dataset in DATASETS:
+        print(str(dataset))
+    print()
+    print(" *** ")
+    res = list(chain(*(dataset.output for dataset in DATASETS)))
+    return res
+
+
 rule all:
-    input:
-        (
-            ([rules.all_svl12k.output] if SVL12K_RAW != "/does/not/exist" else []) +
-            ([EVKD1_TEST_ANSWERS_DF, EVKD1_RESP_DF] if EVKD1_RAW != "/does/not/exist" else [])
-        )
-    run:
-        for filename in input:
-            print(filename)
+    input: all_input
 
 
 rule all_svl12k:
     input:
         SVL12K_DF, SVL12K_DF
+    output:
+        touch(pjoin(WORK, ".svl12k_all"))
+
+
+rule all_evkd1:
+    input:
+        EVKD1_RESP_DF
     output:
         touch(pjoin(WORK, ".svl12k_all"))
 
@@ -142,3 +179,10 @@ rule mk_ehara_svl12k_wordlist:
         SVL12K_LIST
     shell:
         "python -m vocabaqdata.proc.extract_wordlist_from_resps {input} {output}"
+
+
+DATASETS = [
+    Dataset("SVL12K", "SVL12K_RAW", rules.all_svl12k.output),
+    Dataset("EVKD1", "EVKD1_RAW", rules.all_evkd1.output),
+    Dataset("TESTYOURVOCAB_NONNATIVE", "TESTYOURVOCAB_NONNATIVE_RAW", rules.import_testyourvocab_nonnative.output),
+]
