@@ -9,6 +9,10 @@ license = "Apache-v2"
 python = "^3.8"
 wordfreq = "^2.5.0"
 snakemake = "^6.5.1"
+click = "^8.0.1"
+tabulate = "^0.8.9"
+pandas = "^1.2.5"
+pyarrow = "^4.0.1"
 
 [tool.poetry.dev-dependencies]
 

@@ -13,11 +13,8 @@ These datasets
 L1Ls = 1nd language learners
 L2Ls = 2nd language learners
 
-| Name | Target language | Type | Words | Participants | Availability |
-| ---- | ---- | ---- | ---- | ---- | -------- |
-| SVL12K | English | Self-assessed 5-point scale | 12 000 from the SVL wordlist | 16 L2Ls based in Japan | [Personal website](http://yoehara.com/esl-vocabulary-dataset/)
-| EVKD1 | English | Multiple choice (4) definitions from word in context | 100 from the XXX vocabulary size test | 100 L2Ls mainly based in Japan | [Personal website](http://yoehara.com/EVKD1/) (currently broken; direct request via email)
-| TestYourVocab | English | Self-assessed yes/no | ~90-160 per participant from bank of 616 | >1 627 968 L1Ls, >5 772 534 L2Ls from around the word | Direct request via email
+[//]: # (START_TABLE)
+[//]: # (END_TABLE)
 
 ## Relevant word features
 
