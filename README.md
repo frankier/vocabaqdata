@@ -3,6 +3,8 @@
 This repository contains a Snakemake workflow to do some preparation of various
 datasets relevant to modelling vocabulary with an eye towards modelling
 receptive vocabulary inventories. It can also do some enrichment of the data.
+The output formats are DuckDB and Arrow tables, which can be used comfortably
+from Python or R.
 
 ## Vocabulary inventory datasets
 
