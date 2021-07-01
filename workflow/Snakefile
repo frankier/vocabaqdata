@@ -113,73 +113,10 @@ rule get_tabula:
         "wget " + TABULA_URL + " -O " + TABULA_JAR
 
 
-## Importers
-
-### SVL12K
-rule import_ehara_svl12k:
-    input:
-        SVL12K_RAW
-    output:
-        SVL12K_DF
-    shell:
-        "python -m vocabaqdata.importers.ehara_svl12k {input} {output}"
-
-
-rule import_testyourvocab_nonnative:
-    input:
-        users = pjoin(TESTYOURVOCAB_NONNATIVE_RAW, "users_nonnative.tsv"),
-        answers = pjoin(TESTYOURVOCAB_NONNATIVE_RAW, "users_nonnative_answers.tsv"),
-        ranks = pjoin(TESTYOURVOCAB_NONNATIVE_RAW, "ranks.tsv"),
-    output:
-        TESTYOURVOCAB_NONNATIVE_DB
-    shell:
-        "bash ./vocabaqdata/importers/testyourvocab_nonnative.sh {input.users} {input.answers} {input.ranks} {output}"
-
-
-### EVKD1
-rule evkd1_test_qa:
-    output:
-        EVKD1_TEST_QUESTIONS,
-        EVKD1_TEST_ANSWERS
-    shell:
-        "wget -O " + EVKD1_TEST_QUESTIONS + ".pdf " + EVKD1_TEST_QUESTIONS_PDF + " && " +
-        "wget -O " + EVKD1_TEST_ANSWERS + ".pdf " + EVKD1_TEST_ANSWERS_PDF + " && " +
-        "java -jar " + TABULA_JAR +
-        " " + EVKD1_TEST_QUESTIONS + ".pdf --pages all --stream > " +
-        EVKD1_TEST_QUESTIONS + " && " +
-        "java -jar " + TABULA_JAR +
-        " " + EVKD1_TEST_ANSWERS + ".pdf --pages all --stream > " +
-        EVKD1_TEST_ANSWERS
-
-
-rule evkd1_convert_gold_answers:
-    input:
-        EVKD1_TEST_ANSWERS
-    output:
-        EVKD1_TEST_ANSWERS_DF
-    shell:
-        "python -m vocabaqdata.importers.evkd1_test_answers {input} {output}"
-
-
-rule evkd1_process_responses:
-    input:
-        resp = EVKD1_RAW,
-        gold = EVKD1_TEST_ANSWERS_DF
-    output:
-        EVKD1_RESP_DF
-    shell:
-        "python -m vocabaqdata.importers.evkd1 {input.resp} {input.gold} {output}"
-
-
-## Processing
-rule mk_ehara_svl12k_wordlist:
-    input:
-        SVL12K_DF
-    output:
-        SVL12K_LIST
-    shell:
-        "python -m vocabaqdata.proc.extract_wordlist_from_resps {input} {output}"
-
+## Datasets
+include: "datasets/evkd1.smk"
+include: "datasets/svl12k.smk"
+include: "datasets/testyourvocab.smk"
 
 DATASETS = [
     Dataset("SVL12K", "SVL12K_RAW", rules.all_svl12k.output),

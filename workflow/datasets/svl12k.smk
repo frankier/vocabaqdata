@@ -1,0 +1,16 @@
+rule import_ehara_svl12k:
+    input:
+        SVL12K_RAW
+    output:
+        SVL12K_DF
+    shell:
+        "python -m vocabaqdata.importers.ehara_svl12k {input} {output}"
+
+
+rule mk_ehara_svl12k_wordlist:
+    input:
+        SVL12K_DF
+    output:
+        SVL12K_LIST
+    shell:
+        "python -m vocabaqdata.proc.extract_wordlist_from_resps {input} {output}"
