@@ -1,3 +1,19 @@
+# URLS
+cnf("EVKD1_TEST_QUESTIONS_PDF", "https://www.victoria.ac.nz/lals/about/staff/publications/paul-nation/VST-version-A.pdf")
+cnf("EVKD1_TEST_ANSWERS_PDF", "https://www.victoria.ac.nz/lals/about/staff/publications/paul-nation/VST-version-A_answers.pdf")
+
+# Inputs
+cnf("EVKD1_RAW", "/does/not/exist")
+
+# Intermediates
+cnf("EVKD1_TEST_QUESTIONS", pjoin(WORK, "evkd1_test_questions.txt"))
+cnf("EVKD1_TEST_ANSWERS", pjoin(WORK, "evkd1_test_answers.txt"))
+cnf("EVKD1_TEST_ANSWERS_DF", pjoin(WORK, "evkd1_test_answers.parquet"))
+
+# Output
+cnf("EVKD1_RESP_DF", pjoin(WORK, "evkd1_resp.parquet"))
+
+
 rule evkd1_test_qa:
     output:
         EVKD1_TEST_QUESTIONS,

@@ -2,51 +2,36 @@ from os.path import join as pjoin
 from itertools import chain
 
 
+def run_R(script_path, *args):
+    return shell("R " + pjoin(workflow.current_basedir, script_path) + " " + " ".join(args))
+
+
 def cnf(name, val):
     globals()[name] = config.setdefault(name, val)
 
-
-# URLS
-cnf("EVKD1_TEST_QUESTIONS_PDF", "https://www.victoria.ac.nz/lals/about/staff/publications/paul-nation/VST-version-A.pdf")
-cnf("EVKD1_TEST_ANSWERS_PDF", "https://www.victoria.ac.nz/lals/about/staff/publications/paul-nation/VST-version-A_answers.pdf")
-
-# Inputs
-cnf("SVL12K_RAW", "/does/not/exist")
-cnf("EVKD1_RAW", "/does/not/exist")
-cnf("TESTYOURVOCAB_NATIVE_RAW", "/does/not/exist")
-cnf("TESTYOURVOCAB_NONNATIVE_RAW", "/does/not/exist")
 
 # Directories
 cnf("WORK", "work")
 
 # Dependencies
 cnf("BINEXTRA", pjoin(WORK, "bin"))
-cnf("DUCKDB_URL", "https://github.com/cwida/duckdb/releases/download/v0.2.5/duckdb_cli-linux-amd64.zip")
 cnf("TABULA_URL", "https://github.com/tabulapdf/tabula-java/releases/download/v1.0.4/tabula-1.0.4-jar-with-dependencies.jar")
-cnf("DUCKDB_BIN", pjoin(BINEXTRA, "duckdb"))
 cnf("TABULA_JAR", pjoin(BINEXTRA, "tabula.jar"))
-
-# Intermediates
-cnf("SVL12K_DF", pjoin(WORK, "ehara_svl12k.parquet"))
-cnf("SVL12K_LIST", pjoin(WORK, "svl12k_wordlist.txt"))
-cnf("TESTYOURVOCAB_NATIVE_DB", pjoin(WORK, "testyourvocab.native.db"))
-cnf("TESTYOURVOCAB_NONNATIVE_DB", pjoin(WORK, "testyourvocab.nonnative.db"))
-cnf("TESTYOURVOCAB_LIST", pjoin(WORK, "testyourvocab_wordlist.txt"))
-cnf("EVKD1_TEST_QUESTIONS", pjoin(WORK, "evkd1_test_questions.txt"))
-cnf("EVKD1_TEST_ANSWERS", pjoin(WORK, "evkd1_test_answers.txt"))
-cnf("EVKD1_TEST_ANSWERS_DF", pjoin(WORK, "evkd1_test_answers.parquet"))
-cnf("EVKD1_RESP_DF", pjoin(WORK, "evkd1_resp.parquet"))
 
 
 class Dataset:
-    def __init__(self, name, src_name, output):
+    def __init__(self, name, output, src_name=None):
         self.name = name
+        if isinstance(src_name, str):
+            src_name = [src_name]
+        elif src_name is None:
+            src_name = []
         self.src_name = src_name
-        self.src = globals()[src_name]
+        self.src = [globals()[name] for src_name in src_name]
         self._output = output
 
     def _available(self):
-        return self.src != "/does/not/exist"
+        return all((src != "/does/not/exist" for src in self.src))
 
     @property
     def output(self):
@@ -59,7 +44,8 @@ class Dataset:
         if self._available():
             stat = "YES"
         else:
-            stat = f"NO (pass -C {self.src_name} to build)"
+            names = "; ".join(self.src_name)
+            stat = f"NO (pass -C {names} to build)"
         return "{:>30} {}".format(self.name, stat)
 
 
@@ -93,17 +79,6 @@ rule all_evkd1:
 
 
 ## Dependencies
-rule get_duckdb:
-    output:
-        DUCKDB_BIN
-    shell:
-        "mkdir -p " + BINEXTRA + " && " +
-        "cd " + BINEXTRA + " && " +
-        "wget " + DUCKDB_URL + " -O duckdb.zip  && " +
-        "unzip duckdb.zip && " +
-        "rm duckdb.zip"
-
-
 rule get_tabula:
     output:
         TABULA_JAR
@@ -117,9 +92,15 @@ rule get_tabula:
 include: "datasets/evkd1.smk"
 include: "datasets/svl12k.smk"
 include: "datasets/testyourvocab.smk"
+include: "datasets/ecp.smk"
+include: "datasets/elp.smk"
+include: "datasets/flp.smk"
 
 DATASETS = [
-    Dataset("SVL12K", "SVL12K_RAW", rules.all_svl12k.output),
-    Dataset("EVKD1", "EVKD1_RAW", rules.all_evkd1.output),
-    Dataset("TESTYOURVOCAB_NONNATIVE", "TESTYOURVOCAB_NONNATIVE_RAW", rules.import_testyourvocab_nonnative.output),
+    Dataset("SVL12K", rules.all_svl12k.output, "SVL12K_RAW"),
+    Dataset("EVKD1", rules.all_evkd1.output, "EVKD1_RAW"),
+    Dataset("TESTYOURVOCAB", rules.import_testyourvocab_all.output, ["TESTYOURVOCAB_RANKS", "TESTYOURVOCAB_NATIVE_RAW", "TESTYOURVOCAB_NONNATIVE_RAW"]),
+    Dataset("ECP", rules.import_ecp.output),
+    Dataset("ELP", rules.import_elp.output),
+    Dataset("FLP", rules.import_flp.output),
 ]

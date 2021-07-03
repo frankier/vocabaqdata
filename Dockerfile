@@ -6,7 +6,9 @@ RUN apt-get update -qq -y && \
         wget \
         python3-dev \
         python3-pip \
-        git && \
+        git \
+        rar \
+        r-base && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /vocabaqdata/

@@ -1,0 +1,3 @@
+[submodule "submodules/read-elp"]
+	path = submodules/read-elp
+	url = https://github.com/JackEdTaylor/read-elp.git
