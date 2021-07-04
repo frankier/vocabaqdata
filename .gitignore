@@ -1,1 +1,5 @@
+/.direnv/
+/.envrc
+/.venv
+/attic/
 /.snakemake/
