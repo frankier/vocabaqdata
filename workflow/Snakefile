@@ -79,7 +79,7 @@ rule all_evkd1:
 
 
 ## Dependencies
-rule get_tabula:
+rule download_tabula:
     output:
         TABULA_JAR
     shell:

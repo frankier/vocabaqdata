@@ -14,7 +14,7 @@ cnf("EVKD1_TEST_ANSWERS_DF", pjoin(WORK, "evkd1_test_answers.parquet"))
 cnf("EVKD1_RESP_DF", pjoin(WORK, "evkd1_resp.parquet"))
 
 
-rule evkd1_test_qa:
+rule download_and_convert_evkd1_test_qa:
     output:
         EVKD1_TEST_QUESTIONS,
         EVKD1_TEST_ANSWERS
