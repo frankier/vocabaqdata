@@ -20,7 +20,7 @@ def main(readme, table):
     if start_idx is None or end_idx is None:
         raise click.ClickException("Could not find table markers. Aborting!")
     df = pandas.read_csv(table, sep="\t")
-    lines[start_idx:end_idx] = df.to_markdown().strip().split("\n")
+    lines[start_idx:end_idx] = [""] + df.to_markdown().strip().split("\n") + [""]
     readme.truncate()
     readme.seek(0)
     readme.write("\n".join(lines))

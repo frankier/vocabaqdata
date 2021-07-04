@@ -14,6 +14,7 @@ L1Ls = 1nd language learners
 L2Ls = 2nd language learners
 
 [//]: # (START_TABLE)
+
 |    | Name                                | Target language   | Type                                                 | Words                                         | Participants                                          | Availability                                                                               |
 |---:|:------------------------------------|:------------------|:-----------------------------------------------------|:----------------------------------------------|:------------------------------------------------------|:-------------------------------------------------------------------------------------------|
 |  0 | SVL12K                              | English           | Self-assessed 5-point scale                          | 12 000 from the SVL wordlist                  | 16 L2Ls based in Japan                                | [Personal website](http://yoehara.com/esl-vocabulary-dataset/)                             |
@@ -22,6 +23,7 @@ L2Ls = 2nd language learners
 |  3 | ECP (English Crowdsourcing Project) | English           | Lexical decision                                     | ~300-1000 per participant from bank of 62 000 | 700 000                                               | [Repository](https://osf.io/v25ek/)                                                        |
 |  4 | ELP (English Lexicon Project)       | English           | Lexical decision                                     | TODO                                          | TODO                                                  | [Repository](https://osf.io/rpx87/)                                                        |
 |  5 | FLP (French Lexicon Project)        | French            | Lexical decision                                     | TODO                                          | TODO                                                  | [Repository](https://osf.io/f8kc4/)                                                        |
+
 [//]: # (END_TABLE)
 
 ## Relevant word features
