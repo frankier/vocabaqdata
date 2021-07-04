@@ -14,7 +14,7 @@ rule download_flp:
     output:
         FLP_RAR
     shell:
-        "wget -nv " + FLP_URL " -O {output}"
+        "wget -nv " + FLP_URL + " -O {output}"
 
 
 rule extract_flp:

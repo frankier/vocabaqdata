@@ -29,7 +29,7 @@ rule import_testyourvocab_nonnative:
     input:
         users = pjoin(TESTYOURVOCAB_NONNATIVE_RAW, "users_nonnative.tsv"),
         answers = pjoin(TESTYOURVOCAB_NONNATIVE_RAW, "users_nonnative_answers_unique.tsv"),
-        keys = import_testyourvocab_key.output
+        db_created = rules.import_testyourvocab_key.output
     output:
         touch(pjoin(WORK, ".testyourvocab.nonnative.imported"))
     shell:
@@ -40,8 +40,8 @@ rule import_testyourvocab_native:
     input:
         users = pjoin(TESTYOURVOCAB_NATIVE_RAW, "users_native.tsv"),
         answers = pjoin(TESTYOURVOCAB_NATIVE_RAW, "users_native_answers_unique.tsv"),
-        keys = import_testyourvocab_key.output,
-        force_serialise = import_testyourvocab_nonnative.output
+        db_created = rules.import_testyourvocab_key.output,
+        force_serialise = rules.import_testyourvocab_nonnative.output
     output:
         touch(pjoin(WORK, ".testyourvocab.native.imported"))
     shell:
@@ -50,7 +50,7 @@ rule import_testyourvocab_native:
 
 rule import_testyourvocab_all:
     input:
-        import_testyourvocab_nonnative.output,
-        import_testyourvocab_native.output
+        rules.import_testyourvocab_nonnative.output,
+        rules.import_testyourvocab_native.output
     output:
         TESTYOURVOCAB_DB

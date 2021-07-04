@@ -3,6 +3,13 @@ cnf("SVL12K_DF", pjoin(WORK, "ehara_svl12k.parquet"))
 cnf("SVL12K_LIST", pjoin(WORK, "svl12k_wordlist.txt"))
 
 
+rule all_svl12k:
+    input:
+        SVL12K_DF, SVL12K_DF
+    output:
+        touch(pjoin(WORK, ".svl12k_all"))
+
+
 rule import_ehara_svl12k:
     input:
         SVL12K_RAW

@@ -14,6 +14,13 @@ cnf("EVKD1_TEST_ANSWERS_DF", pjoin(WORK, "evkd1_test_answers.parquet"))
 cnf("EVKD1_RESP_DF", pjoin(WORK, "evkd1_resp.parquet"))
 
 
+rule all_evkd1:
+    input:
+        EVKD1_RESP_DF
+    output:
+        touch(pjoin(WORK, ".svl12k_all"))
+
+
 rule download_and_convert_evkd1_test_qa:
     output:
         EVKD1_TEST_QUESTIONS,

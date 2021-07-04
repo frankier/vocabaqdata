@@ -1,5 +1,6 @@
 from os.path import join as pjoin
 from itertools import chain
+from typing import List
 
 
 def run_R(script_path, *args):
@@ -20,28 +21,28 @@ cnf("TABULA_JAR", pjoin(BINEXTRA, "tabula.jar"))
 
 
 class Dataset:
-    def __init__(self, name, output, src_name=None):
+    def __init__(self, name, out, src_name=None):
         self.name = name
         if isinstance(src_name, str):
             src_name = [src_name]
         elif src_name is None:
             src_name = []
         self.src_name = src_name
-        self.src = [globals()[name] for src_name in src_name]
-        self._output = output
+        self.src = [globals()[src_name] for src_name in src_name]
+        self._out = out
 
-    def _available(self):
+    def is_available(self):
         return all((src != "/does/not/exist" for src in self.src))
 
     @property
-    def output(self):
-        if self._available():
-            return [self._output]
+    def out(self) -> List[str]:
+        if self.is_available():
+            return self._out
         else:
             return []
 
     def __str__(self):
-        if self._available():
+        if self.is_available():
             stat = "YES"
         else:
             names = "; ".join(self.src_name)
@@ -56,26 +57,12 @@ def all_input(wc):
         print(str(dataset))
     print()
     print(" *** ")
-    res = list(chain(*(dataset.output for dataset in DATASETS)))
+    res = [out for dataset in DATASETS for out in dataset.out]
     return res
 
 
 rule all:
     input: all_input
-
-
-rule all_svl12k:
-    input:
-        SVL12K_DF, SVL12K_DF
-    output:
-        touch(pjoin(WORK, ".svl12k_all"))
-
-
-rule all_evkd1:
-    input:
-        EVKD1_RESP_DF
-    output:
-        touch(pjoin(WORK, ".svl12k_all"))
 
 
 ## Dependencies
@@ -95,6 +82,7 @@ include: "datasets/testyourvocab.smk"
 include: "datasets/ecp.smk"
 include: "datasets/elp.smk"
 include: "datasets/flp.smk"
+
 
 DATASETS = [
     Dataset("SVL12K", rules.all_svl12k.output, "SVL12K_RAW"),
