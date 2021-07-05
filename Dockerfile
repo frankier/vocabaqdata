@@ -8,7 +8,8 @@ RUN apt-get update -qq -y && \
         python3-pip \
         git \
         rar \
-        r-base && \
+        r-base \
+        default-libmysqlclient-dev && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /vocabaqdata/
