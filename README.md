@@ -32,11 +32,18 @@ These datasets include features of words which are highly relevant to
 vocabulary inventory modelling. The most important beyond frequency, which is
 not covered here are age of acquisition and concreteness.
 
-## TODO:
+## Candidates for addition
+
+### Individual datasets
 
 | Name | Link | Commment |
---------------------------
-|  |  |  |
-|  | https://www.iris-database.org/iris/app/home/detail?id=york%3a938002&ref=search |  |
-|  | https://www.iris-database.org/iris/app/home/detail?id=york%3a939292&ref=search |  |
-|  | https://www.iris-database.org/iris/app/home/detail?id=york%3a852665&ref=search |  |
+|------|------|----------|
+| X | https://www.iris-database.org/iris/app/home/detail?id=york%3a938002&ref=search |  |
+| X | https://www.iris-database.org/iris/app/home/detail?id=york%3a939292&ref=search |  |
+| X | https://www.iris-database.org/iris/app/home/detail?id=york%3a852665&ref=search |  |
+
+### Lists
+
+ * [List of word knowledge megastudies on the webpages of the Center for Reading Research at Ghent University](http://crr.ugent.be/programs-data/megastudy-data-available)
+ * [Iris database](https://www.iris-database.org/)
+ * Chase references from **Milton, J. (2009). Measuring Second Language Vocabulary Acquisition.**
