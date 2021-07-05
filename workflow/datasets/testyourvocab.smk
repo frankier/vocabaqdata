@@ -4,7 +4,7 @@ cnf("TESTYOURVOCAB_NATIVE_RAW", "/does/not/exist")
 cnf("TESTYOURVOCAB_NONNATIVE_RAW", "/does/not/exist")
 
 # Outputs
-cnf("TESTYOURVOCAB_DB", pjoin(WORK, "testyourvocab.db"))
+cnf("TESTYOURVOCAB_DB", pjoin(WORK, "testyourvocab.duckdb"))
 
 
 rule import_testyourvocab_key:
