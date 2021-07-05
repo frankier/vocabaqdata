@@ -6,12 +6,12 @@ def setup_import(conn):
     """)
 
 
-def import_tsv(conn, tbl_name, path, no_header=False):
+def import_tsv(conn, tbl_name, path, no_header=False, null="NULL"):
     header = "0" if no_header else "1"
     print(f"Importing {tbl_name}")
     conn.execute(f"""
     COPY {tbl_name} FROM '{path}'
-    ( DELIMETER '\t', QUOTE '', NULL 'NULL', HEADER {header} );
+    ( DELIMETER '\t', QUOTE '', NULL '{null}', HEADER {header} );
     """)
 
 

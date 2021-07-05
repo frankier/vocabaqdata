@@ -83,6 +83,7 @@ include: "datasets/ecp.smk"
 include: "datasets/elp.smk"
 include: "datasets/flp.smk"
 include: "datasets/wordbank.smk"
+include: "datasets/blp.smk"
 
 
 DATASETS = [
@@ -92,5 +93,6 @@ DATASETS = [
     Dataset("ECP", rules.import_ecp.output),
     Dataset("ELP", rules.import_elp.output),
     Dataset("FLP", rules.import_flp.output),
+    Dataset("BLP", rules.import_blp_all.output),
     Dataset("WORDBANK", rules.download_and_export_wordbank.output),
 ]
