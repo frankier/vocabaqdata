@@ -4,4 +4,6 @@ EVKD1	English	Multiple choice (4) definitions from word in context	100 from the 
 TestYourVocab	English	Self-assessed yes/no	~90-160 per participant from bank of 616	>1 627 968 L1Ls, >5 772 534 L2Ls from around the word	Direct request via email
 ECP (English Crowdsourcing Project)	English	Lexical decision	~300-1000 per participant from bank of 62 000	700 000	[Repository](https://osf.io/v25ek/)
 ELP (English Lexicon Project)	English	Lexical decision	TODO	TODO	[Repository](https://osf.io/rpx87/)
+BLP (British Lexicon Project)	English	Lexical decision	TODO	TODO	[Departmental website](http://crr.ugent.be/blp/txt/)
 FLP (French Lexicon Project)	French	Lexical decision	TODO	TODO	[Repository](https://osf.io/f8kc4/)
+WordBank (Collection of many studies)	Multiple	Multiple	MacArthur-Bates Communicative Development Inventory (MB-CDI)	Children; TODO	[Departmental website](http://wordbank.stanford.edu/) (accessed through public MySQL database, same as the [wordbankr](https://github.com/langcog/wordbankr) package)
