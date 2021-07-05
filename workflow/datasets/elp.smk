@@ -1,6 +1,3 @@
-# URLs
-cnf("ELP_URL", "https://osf.io/6n92h/download")
-
 # Intermediates
 cnf("ELP_CSV_DIR", pjoin(WORK, "elp"))
 ELP_CSV = pjoin(ELP_CSV_DIR, "elp.csv")
@@ -9,7 +6,7 @@ ELP_CSV = pjoin(ELP_CSV_DIR, "elp.csv")
 cnf("ELP_DF", pjoin(WORK, "elp.parquet"))
 
 
-rule run_read_elp:
+rule download_and_export_elp:
     output:
         ELP_CSV 
     run:
