@@ -23,9 +23,10 @@ rule extract_flp:
     output:
         FLP_TSV
     shell:
-        "mkdir -p " + FLP_TSV_DIR +
+        "input=$(realpath {input})"
+        " && mkdir -p " + FLP_TSV_DIR +
         " && cd " + FLP_TSV_DIR +
-        " && unrar e {input}"
+        " && unrar e -o+ $input"
 
 
 rule import_flp:

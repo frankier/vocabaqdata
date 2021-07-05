@@ -26,7 +26,9 @@ rule extract_ecp:
     output:
         **ECP_CSVS
     shell:
-        "cd ECP_RAW/.. && tar -xzf {input}"
+        "input=$(realpath {input}) " +
+        " && cd " + ECP_RAW + "/.." +
+        " && tar -xzf $input"
 
 rule import_ecp:
     input:
