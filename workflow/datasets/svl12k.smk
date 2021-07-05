@@ -27,3 +27,12 @@ rule mk_svl12k_wordlist:
         SVL12K_LIST
     shell:
         "python -m vocabaqdata.proc.extract_wordlist_from_resps {input} {output}"
+
+
+rule enrich_svl12k:
+    input:
+        SVL12K_DF
+    output:
+        SVL12K_ENRICHED_DF
+    shell:
+        "python -m vocabaqdata.proc.enrich_svl12k {input} {output}"
