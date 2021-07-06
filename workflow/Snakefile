@@ -3,10 +3,6 @@ from itertools import chain
 from typing import List
 
 
-def run_R(script_path, *args):
-    return shell("R " + pjoin(workflow.current_basedir, script_path) + " " + " ".join(args))
-
-
 def cnf(name, val):
     globals()[name] = config.setdefault(name, val)
 
