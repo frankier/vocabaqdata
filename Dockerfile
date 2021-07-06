@@ -9,10 +9,6 @@ RUN apt-get update -qq -y && \
         git \
         rar \
         r-base \
-        r-cran-dplyr \
-        r-cran-tidyr \
-        r-cran-readr \
-        r-cran-purrr \
         default-libmysqlclient-dev \
         default-jre && \
     rm -rf /var/lib/apt/lists/*
@@ -33,5 +29,7 @@ RUN echo "/vocabaqdata" > \
     /usr/local/lib/python3.8/dist-packages/vocabaqdata.pth
 
 RUN ln -sf /usr/bin/python3 /usr/bin/python
+
+RUN R -e 'install.packages(c("dplyr", "tidyr", "readr", "purrr"))'
 
 ADD . /vocabaqdata/
