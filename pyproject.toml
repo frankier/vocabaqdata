@@ -16,6 +16,7 @@ pyarrow = "^4.0.1"
 SQLAlchemy = "^1.4.20"
 duckdb = "^0.2.7"
 mysqlclient = "^2.0.3"
+more-itertools = "^8.8.0"
 
 [tool.poetry.dev-dependencies]
 
