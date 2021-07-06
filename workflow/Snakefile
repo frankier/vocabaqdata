@@ -83,7 +83,6 @@ rule download_tabula:
         TABULA_JAR
     shell:
         "mkdir -p " + BINEXTRA + " && " +
-        "cd " + BINEXTRA + " && " +
         "wget " + TABULA_URL + " -O " + TABULA_JAR
 
 
