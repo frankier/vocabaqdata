@@ -9,7 +9,8 @@ RUN apt-get update -qq -y && \
         git \
         rar \
         r-base \
-        default-libmysqlclient-dev && \
+        default-libmysqlclient-dev \
+        default-jre && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /vocabaqdata/
