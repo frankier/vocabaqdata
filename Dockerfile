@@ -9,6 +9,10 @@ RUN apt-get update -qq -y && \
         git \
         rar \
         r-base \
+        r-cran-dplyr \
+        r-cran-tidyr \
+        r-cran-readr \
+        r-cran-purrr \
         default-libmysqlclient-dev \
         default-jre && \
     rm -rf /var/lib/apt/lists/*
