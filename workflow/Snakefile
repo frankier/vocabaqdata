@@ -35,11 +35,15 @@ class Dataset:
         return all((src != "/does/not/exist" for src in self.src))
 
     @property
-    def out(self) -> List[str]:
+    def available_out(self) -> List[str]:
         if self.is_available():
             return self._out
         else:
             return []
+
+    @property
+    def out(self):
+        return self._out
 
     def __str__(self):
         if self.is_available():
@@ -50,15 +54,27 @@ class Dataset:
         return "{:>30} {}".format(self.name, stat)
 
 
-def all_input(wc):
+def print_availabilities():
     print(" *** ")
     print()
     for dataset in DATASETS:
         print(str(dataset))
     print()
     print(" *** ")
-    res = [out for dataset in DATASETS for out in dataset.out]
-    return res
+
+
+def all_available_input(wc):
+    print_availabilities()
+    return [out for dataset in DATASETS for out in dataset.available_out]
+
+
+rule all_available:
+    input: all_available_input
+
+
+def all_input(wc):
+    print_availabilities()
+    return [out for dataset in DATASETS for out in dataset.out]
 
 
 rule all:
