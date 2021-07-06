@@ -7,59 +7,26 @@ cnf("TESTYOURVOCAB_NONNATIVE_RAW", "/does/not/exist")
 cnf("TESTYOURVOCAB_DB", pjoin(WORK, "testyourvocab.duckdb"))
 
 
-rule import_testyourvocab_key:
+rule import_testyourvocab:
     input:
-        TESTYOURVOCAB_RANKS
+        ranks = TESTYOURVOCAB_RANKS,
+        nonnative_users = pjoin(TESTYOURVOCAB_NONNATIVE_RAW, "users_nonnative.tsv"),
+        nonnative_answers = pjoin(TESTYOURVOCAB_NONNATIVE_RAW, "users_nonnative_answers.tsv"),
+        native_users = pjoin(TESTYOURVOCAB_NATIVE_RAW, "users_native.tsv"),
+        native_answers = pjoin(TESTYOURVOCAB_NATIVE_RAW, "users_native_answers.tsv"),
     output:
-        touch(pjoin(WORK, ".testyourvocab.key.imported"))
+        unique_nonnative_answers = temp(pjoin(TESTYOURVOCAB_NONNATIVE_RAW, "users_nonnative_answers.unique.tsv")),
+        unique_native_answers = temp(pjoin(TESTYOURVOCAB_NATIVE_RAW, "users_native_answers.unique.tsv")),
+        db = TESTYOURVOCAB_DB
     shell:
-        "python -m vocabaqdata.importers.testyourvocab_nonnative {input} " + TESTYOURVOCAB_DB
-
-
-rule filter_nonnative_unique_answers:
-    input:
-        pjoin(TESTYOURVOCAB_NONNATIVE_RAW, "users_nonnative_answers.tsv")
-    output:
-        temp(pjoin(TESTYOURVOCAB_NONNATIVE_RAW, "users_nonnative_answers.unique.tsv"))
-    shell:
-        "tail +2 {input} | sort -k1n -k2n -u --buffer-size=8G - > {output}"
-
-
-rule filter_native_unique_answers:
-    input:
-        pjoin(TESTYOURVOCAB_NATIVE_RAW, "users_native_answers.tsv")
-    output:
-        temp(pjoin(TESTYOURVOCAB_NATIVE_RAW, "users_native_answers.unique.tsv"))
-    shell:
-        "tail +2 {input} | sort -k1n -k2n -u --buffer-size=8G - > {output}"
-
-
-rule import_testyourvocab_nonnative:
-    input:
-        users = pjoin(TESTYOURVOCAB_NONNATIVE_RAW, "users_nonnative.tsv"),
-        answers = pjoin(TESTYOURVOCAB_NONNATIVE_RAW, "users_nonnative_answers.unique.tsv"),
-        db_created = rules.import_testyourvocab_key.output
-    output:
-        touch(pjoin(WORK, ".testyourvocab.nonnative.imported"))
-    shell:
-        "python -m vocabaqdata.importers.testyourvocab_nonnative {input.users} {input.answers} " + TESTYOURVOCAB_DB
-
-
-rule import_testyourvocab_native:
-    input:
-        users = pjoin(TESTYOURVOCAB_NATIVE_RAW, "users_native.tsv"),
-        answers = pjoin(TESTYOURVOCAB_NATIVE_RAW, "users_native_answers.unique.tsv"),
-        db_created = rules.import_testyourvocab_key.output,
-        force_serialise = rules.import_testyourvocab_nonnative.output
-    output:
-        touch(pjoin(WORK, ".testyourvocab.native.imported"))
-    shell:
-        "python -m vocabaqdata.importers.testyourvocab_native {input.users} {input.answers} " + TESTYOURVOCAB_DB
-
-
-rule import_testyourvocab_all:
-    input:
-        rules.import_testyourvocab_nonnative.output,
-        rules.import_testyourvocab_native.output
-    output:
-        TESTYOURVOCAB_DB
+        "python -m vocabaqdata.importers.testyourvocab_key {input} {output.db}" +
+        " && tail +2 {input.nonnative_answers}" +
+        "    | sort -k1n -k2n -u --buffer-size=8G -" + 
+        "    > {output.unique_nonnative_answers}"
+        " && tail +2 {input.native_answers} " + 
+        "    | sort -k1n -k2n -u --buffer-size=8G - " +
+        "    > {output.unique_native_answers}" +
+        " && python -m vocabaqdata.importers.testyourvocab_nonnative" +
+        "    {input.unique_nonnative_users} {input.nonnative_answers} {output.db}" +
+        " && python -m vocabaqdata.importers.testyourvocab_native " +
+        "    {input.unique_native_users} {input.native_answers} {output.db}"

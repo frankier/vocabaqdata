@@ -100,7 +100,7 @@ include: "datasets/blp.smk"
 DATASETS = [
     Dataset("SVL12K", rules.all_svl12k.output, "SVL12K_RAW"),
     Dataset("EVKD1", rules.all_evkd1.output, "EVKD1_RAW"),
-    Dataset("TESTYOURVOCAB", rules.import_testyourvocab_all.output, ["TESTYOURVOCAB_RANKS", "TESTYOURVOCAB_NATIVE_RAW", "TESTYOURVOCAB_NONNATIVE_RAW"]),
+    Dataset("TESTYOURVOCAB", rules.import_testyourvocab.output, ["TESTYOURVOCAB_RANKS", "TESTYOURVOCAB_NATIVE_RAW", "TESTYOURVOCAB_NONNATIVE_RAW"]),
     Dataset("ECP", rules.import_ecp.output),
     Dataset("ELP", rules.import_elp.output),
     Dataset("FLP", rules.import_flp.output),
