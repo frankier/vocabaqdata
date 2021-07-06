@@ -18,7 +18,7 @@ rule all_evkd1:
     input:
         EVKD1_RESP_DF
     output:
-        touch(pjoin(WORK, ".svl12k_all"))
+        touch(pjoin(WORK, ".evkd1_all"))
 
 
 rule download_and_convert_evkd1_test_qa:
