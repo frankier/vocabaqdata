@@ -12,6 +12,7 @@ rule download_and_export_elp:
         r_script = srcdir("../../submodules/read-elp/trial-level-ldt.R")
     shell:
         "mkdir -p " + ELP_CSV_DIR
+        + " && cd " + ELP_CSV_DIR
         + " && Rscript {params.r_script}"
 
 
