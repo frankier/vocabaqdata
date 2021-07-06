@@ -2,7 +2,7 @@ import click
 
 import pandas
 
-from ..utils.freq import add_zipfs
+from ..feats.freq import add_zipfs
 
 
 @click.command()
