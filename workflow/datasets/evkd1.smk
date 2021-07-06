@@ -22,6 +22,8 @@ rule all_evkd1:
 
 
 rule download_and_convert_evkd1_test_qa:
+    input:
+        TABULA_JAR
     output:
         EVKD1_TEST_QUESTIONS,
         EVKD1_TEST_ANSWERS
