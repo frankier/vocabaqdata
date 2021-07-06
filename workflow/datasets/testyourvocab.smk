@@ -16,11 +16,20 @@ rule import_testyourvocab_key:
         "python -m vocabaqdata.importers.testyourvocab_nonnative {input} " + TESTYOURVOCAB_DB
 
 
-rule filter_unique_answers:
+rule filter_nonnative_unique_answers:
     input:
         pjoin(TESTYOURVOCAB_NONNATIVE_RAW, "users_nonnative_answers.tsv")
     output:
-        temp(pjoin(TESTYOURVOCAB_NONNATIVE_RAW, "users_nonnative_answers_unique.tsv"))
+        temp(pjoin(TESTYOURVOCAB_NONNATIVE_RAW, "users_nonnative_answers.unique.tsv"))
+    shell:
+        "tail +2 {input} | sort -k1n -k2n -u --buffer-size=30% - > {output}"
+
+
+rule filter_native_unique_answers:
+    input:
+        pjoin(TESTYOURVOCAB_NATIVE_RAW, "users_native_answers.tsv")
+    output:
+        temp(pjoin(TESTYOURVOCAB_NATIVE_RAW, "users_native_answers.unique.tsv"))
     shell:
         "tail +2 {input} | sort -k1n -k2n -u --buffer-size=30% - > {output}"
 
@@ -28,7 +37,7 @@ rule filter_unique_answers:
 rule import_testyourvocab_nonnative:
     input:
         users = pjoin(TESTYOURVOCAB_NONNATIVE_RAW, "users_nonnative.tsv"),
-        answers = pjoin(TESTYOURVOCAB_NONNATIVE_RAW, "users_nonnative_answers_unique.tsv"),
+        answers = pjoin(TESTYOURVOCAB_NONNATIVE_RAW, "users_nonnative_answers.unique.tsv"),
         db_created = rules.import_testyourvocab_key.output
     output:
         touch(pjoin(WORK, ".testyourvocab.nonnative.imported"))
@@ -39,7 +48,7 @@ rule import_testyourvocab_nonnative:
 rule import_testyourvocab_native:
     input:
         users = pjoin(TESTYOURVOCAB_NATIVE_RAW, "users_native.tsv"),
-        answers = pjoin(TESTYOURVOCAB_NATIVE_RAW, "users_native_answers_unique.tsv"),
+        answers = pjoin(TESTYOURVOCAB_NATIVE_RAW, "users_native_answers.unique.tsv"),
         db_created = rules.import_testyourvocab_key.output,
         force_serialise = rules.import_testyourvocab_nonnative.output
     output:
