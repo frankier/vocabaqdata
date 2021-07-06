@@ -22,7 +22,7 @@ rule filter_nonnative_unique_answers:
     output:
         temp(pjoin(TESTYOURVOCAB_NONNATIVE_RAW, "users_nonnative_answers.unique.tsv"))
     shell:
-        "tail +2 {input} | sort -k1n -k2n -u --buffer-size=30% - > {output}"
+        "tail +2 {input} | sort -k1n -k2n -u --buffer-size=8G - > {output}"
 
 
 rule filter_native_unique_answers:
@@ -31,7 +31,7 @@ rule filter_native_unique_answers:
     output:
         temp(pjoin(TESTYOURVOCAB_NATIVE_RAW, "users_native_answers.unique.tsv"))
     shell:
-        "tail +2 {input} | sort -k1n -k2n -u --buffer-size=30% - > {output}"
+        "tail +2 {input} | sort -k1n -k2n -u --buffer-size=8G - > {output}"
 
 
 rule import_testyourvocab_nonnative:
