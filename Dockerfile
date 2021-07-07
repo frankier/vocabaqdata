@@ -7,7 +7,7 @@ RUN apt-get update -qq -y && \
         python3-dev \
         python3-pip \
         git \
-        rar \
+        unrar \
         r-base \
         default-libmysqlclient-dev \
         default-jre && \
