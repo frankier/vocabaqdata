@@ -27,6 +27,6 @@ rule import_testyourvocab:
         "    | sort -k1n -k2n -u --buffer-size=8G - " +
         "    > {output.unique_native_answers}" +
         " && python -m vocabaqdata.importers.testyourvocab_nonnative" +
-        "    {input.unique_nonnative_users} {input.nonnative_answers} {output.db}" +
+        "    {input.nonnative_users} {output.unique_nonnative_answers} {output.db}" +
         " && python -m vocabaqdata.importers.testyourvocab_native " +
-        "    {input.unique_native_users} {input.native_answers} {output.db}"
+        "    {input.native_users} {output.unique_native_answers} {output.db}"
