@@ -25,7 +25,7 @@ def mk_import_command(filetype="csv", **kwargs):
         sep = "\t"
 
     @click.command()
-    @click.argument(filetype + "_in", "inf")
+    @click.argument("inf")
     @click.argument("parquet_out")
     def main(inf, parquet_out):
         df = pandas.read_csv(inf, sep=sep, **kwargs)
