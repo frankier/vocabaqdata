@@ -54,9 +54,9 @@ def main(profiles_tsv, decisions_tsv, sessions_tsv, db_out):
     );
     """)
 
-    import_tsv(conn, "profiles", profiles_tsv)
-    import_tsv(conn, "decisions", decisions_tsv)
-    import_tsv(conn, "sessions", sessions_tsv)
+    import_tsv(conn, "profiles", profiles_tsv, null="")
+    import_tsv(conn, "decisions", decisions_tsv, null="")
+    import_tsv(conn, "sessions", sessions_tsv, null="")
 
 
 if __name__ == "__main__":
