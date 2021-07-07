@@ -19,7 +19,7 @@ rule import_testyourvocab:
         unique_native_answers = temp(pjoin(TESTYOURVOCAB_NATIVE_RAW, "users_native_answers.unique.tsv")),
         db = TESTYOURVOCAB_DB
     shell:
-        "python -m vocabaqdata.importers.testyourvocab_key {input} {output.db}" +
+        "python -m vocabaqdata.importers.testyourvocab_key {input.ranks} {output.db}" +
         " && tail +2 {input.nonnative_answers}" +
         "    | sort -k1n -k2n -u --buffer-size=8G -" + 
         "    > {output.unique_nonnative_answers}"
