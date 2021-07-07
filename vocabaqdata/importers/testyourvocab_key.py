@@ -257,3 +257,7 @@ def main(ranks_tsv, db_out):
     import_key(conn, "english_nationalities", NATIONALITY_ENGLISH)
     import_key(conn, "genders", GENDER)
     import_key(conn, "nationalities", GENDER)
+
+
+if __name__ == "__main__":
+    main()

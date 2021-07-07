@@ -30,3 +30,7 @@ def main(users_tsv, answers_tsv, db_out):
 
     import_tsv(conn, "users_native", users_tsv)
     import_tsv(conn, "answers_native", answers_tsv)
+
+
+if __name__ == "__main__":
+    main()

@@ -31,3 +31,7 @@ def main(users_tsv, answers_tsv, db_out):
 
     import_tsv(conn, "users_nonnative", users_tsv)
     import_tsv(conn, "answers_nonnative", answers_tsv, no_header=True)
+
+
+if __name__ == "__main__":
+    main()
