@@ -222,7 +222,7 @@ def import_key(conn, tbl_name, key_text):
     print(f"Importing {tbl_name}")
     conn.executemany(
         f"insert into {tbl_name} values (?, ?)",
-        [line.split(" ") for line in key_text.strip().split("\n")]
+        [line.split(" ", maxsplit=1) for line in key_text.strip().split("\n")]
     )
 
 
