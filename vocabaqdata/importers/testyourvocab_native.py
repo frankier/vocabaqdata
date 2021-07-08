@@ -19,6 +19,7 @@ def main(users_tsv, answers_tsv, db_out):
         year_born int,
         month_born int,
         gender int,
+        nationality int,
         verbal_sat int
     );
     create table answers_native (
