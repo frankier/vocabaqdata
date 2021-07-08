@@ -9,6 +9,8 @@ cnf("SPALEX_CSVS_DIR", pjoin(WORK, "spalex_csvs"))
 
 ## Output
 cnf("SPALEX_DB", pjoin(WORK, "spalex.duckdb"))
+cnf("SPALEX_DF", pjoin(WORK, "spalex.inventory.parquet"))
+cnf("SPALEX_ENRICHED_DF", pjoin(WORK, "spalex.inventory.enriched.parquet"))
 
 
 rule download_spalex:
@@ -17,7 +19,7 @@ rule download_spalex:
     run:
         shell("mkdir -p " + SPALEX_CSVS_DIR)
         for url in SPALEX_URLS:
-            shell("cd " + SPALEX_ZIPS_DIR + " && wget -nv " + url)
+            shell("cd " + SPALEX_CSVS_DIR + " && wget -nv " + url)
 
 
 rule import_spalex:
