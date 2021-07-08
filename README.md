@@ -48,4 +48,10 @@ not covered here are age of acquisition and concreteness.
 
  * [List of word knowledge megastudies on the webpages of the Center for Reading Research at Ghent University](http://crr.ugent.be/programs-data/megastudy-data-available)
  * [Iris database](https://www.iris-database.org/)
- * Chase references from **Milton, J. (2009). Measuring Second Language Vocabulary Acquisition.**
+ * Chase references from *Milton, J. (2009). Measuring Second Language Vocabulary Acquisition.*
+
+
+### Cannot find trial level data
+
+| Name | URL | First author contact | Status |
+| The Chinese Lexicon Project | https://link.springer.com/article/10.3758/s13428-016-0810-5 | http://clst.fed.cuhk.edu.hk/faculty/prof-tse-chi-shing/ | TODO |
