@@ -15,6 +15,14 @@ def import_tsv(conn, tbl_name, path, no_header=False, null="NULL"):
     """)
 
 
+def import_csv(conn, tbl_name, path):
+    print(f"Importing {tbl_name}")
+    conn.execute(f"""
+    COPY {tbl_name} FROM '{path}'
+    ( DELIMETER ',', QUOTE '"', NULL '', HEADER 1 );
+    """)
+
+
 def mk_import_command(filetype="csv", **kwargs):
     import click
     import pandas

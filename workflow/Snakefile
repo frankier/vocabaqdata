@@ -95,6 +95,7 @@ include: "datasets/elp.smk"
 include: "datasets/flp.smk"
 include: "datasets/wordbank.smk"
 include: "datasets/blp.smk"
+include: "datasets/spalex.smk"
 
 
 DATASETS = [
@@ -105,5 +106,6 @@ DATASETS = [
     Dataset("ELP", rules.import_elp.output),
     Dataset("FLP", rules.import_flp.output),
     Dataset("BLP", rules.import_blp_all.output),
+    Dataset("SPALEX", rules.import_spalex_all.output),
     Dataset("WORDBANK", rules.download_and_export_wordbank.output),
 ]
