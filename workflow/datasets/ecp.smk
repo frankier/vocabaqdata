@@ -11,7 +11,9 @@ ECP_CSVS = dict(
 )
 
 # Outputs
-cnf("ECP_DB", pjoin(WORK, "ecp.db"))
+cnf("ECP_DB", pjoin(WORK, "ecp.duckdb"))
+cnf("ECP_DF", pjoin(WORK, "ecp.inventory.parquet"))
+cnf("ECP_ENRICHED_DF", pjoin(WORK, "ecp.inventory.enriched.parquet"))
 
 
 rule download_ecp:
@@ -37,3 +39,30 @@ rule import_ecp:
         ECP_DB
     shell:
         "python -m vocabaqdata.importers.ecp {input.profiles} {input.decisions} {input.sessions} {output}"
+
+
+rule ecp_to_inventory:
+    input:
+        ECP_DB
+    output:
+        ECP_DF
+    shell:
+        "python -m vocabaqdata.proc.lexdecis_to_inventory {input} {output}"
+
+
+rule enrich_ecp_inventory:
+    input:
+        ECP_DF
+    output:
+        ECP_ENRICHED_DF
+    shell:
+        "python -m vocabaqdata.proc.add_zipfs {input} {output}"
+
+
+rule import_ecp_all:
+    input:
+        rules.import_ecp.output,
+        rules.ecp_to_inventory.output,
+        rules.enrich_ecp_inventory.output
+    output:
+        touch(pjoin(WORK, ".ecp_all"))
