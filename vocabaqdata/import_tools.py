@@ -29,6 +29,6 @@ def mk_import_command(filetype="csv", **kwargs):
     @click.argument("parquet_out")
     def main(inf, parquet_out):
         df = pandas.read_csv(inf, sep=sep, **kwargs)
-        df.write_parquet(parquet_out)
+        df.to_parquet(parquet_out)
 
     return main
