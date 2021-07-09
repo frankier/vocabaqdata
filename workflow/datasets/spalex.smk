@@ -19,7 +19,10 @@ rule download_spalex:
     run:
         shell("mkdir -p " + SPALEX_CSVS_DIR)
         for url in SPALEX_URLS:
-            shell("cd " + SPALEX_CSVS_DIR + " && wget -nv " + url)
+            shell(
+            "cd " + SPALEX_CSVS_DIR +
+            " && wget --content-disposition -nv " + url
+            )
 
 
 rule import_spalex:
