@@ -16,6 +16,8 @@ cnf("FLP_DF", pjoin(WORK, "flp.parquet"))
 cnf("FLP_PSEUDOWORDS_DF", pjoin(WORK, "flp.pseudowords.parquet"))
 cnf("FLP_WORDS_DF", pjoin(WORK, "flp.words.parquet"))
 cnf("FLP_DB", pjoin(WORK, "flp.duckdb"))
+cnf("FLP_INVENTORY_DF", pjoin(WORK, "flp.inventory.parquet"))
+cnf("FLP_INVENTORY_ENRICHED_DF", pjoin(WORK, "flp.inventory.enriched.parquet"))
 
 
 rule download_flp:
@@ -79,3 +81,22 @@ rule import_flp_db:
         "python -m vocabaqdata.importers.flp" +
         " {input.decisions} {input.pseudowords}" +
         " {input.words} {output}"
+
+
+rule flp_to_inventory:
+    input:
+        FLP_DB
+    output:
+        FLP_INVENTORY_DF
+    shell:
+        "python -m vocabaqdata.proc.lexdecis_to_inventory" +
+        " --fmt flp {input} {output}"
+
+
+rule enrich_flp_inventory:
+    input:
+        FLP_INVENTORY_DF
+    output:
+        FLP_INVENTORY_ENRICHED_DF
+    shell:
+        "python -m vocabaqdata.proc.add_zipfs {input} {output}"

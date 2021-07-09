@@ -7,6 +7,28 @@ from functools import partial
 import_spalex_csv = partial(import_csv, null="NA", quote='"')
 
 
+def create_view(conn):
+    conn.execute("""
+    create view decision_view as
+    select
+        exp_id as participant,
+        case
+            when lexicality = 'W' then 'W'
+            else 'N'
+        end as lexicality,
+        case
+            when lexicality = 'W' and accuracy then 'W'
+            when lexicality = 'NW' and accuracy then 'N'
+            when lexicality = 'W' and not accuracy then 'N'
+            else 'W'
+        end as response,
+        accuracy,
+        spelling
+    from
+        lexical;
+    """)
+
+
 @click.command()
 @click.argument("word_info_csv", type=click.Path(exists=True))
 @click.argument("lexical_csv", type=click.Path(exists=True))
@@ -67,6 +89,7 @@ def main(word_info_csv, lexical_csv, trials_csv, sessions_csv, db_out):
     import_spalex_csv(conn, "lexical", lexical_csv)
     import_spalex_csv(conn, "trials", trials_csv)
     import_spalex_csv(conn, "sessions", sessions_csv)
+    create_view(conn)
 
 
 if __name__ == "__main__":

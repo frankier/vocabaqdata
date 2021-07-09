@@ -45,7 +45,8 @@ rule spalex_to_inventory:
     output:
         SPALEX_DF
     shell:
-        "python -m vocabaqdata.proc.lexdecis_to_inventory {input} {output}"
+        "python -m vocabaqdata.proc.lexdecis_to_inventory" +
+        " --fmt spalex {input} {output}"
 
 
 rule enrich_spalex_inventory:

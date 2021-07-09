@@ -55,7 +55,8 @@ rule blp_to_inventory:
     output:
         BLP_DF
     shell:
-        "python -m vocabaqdata.proc.lexdecis_to_inventory {input} {output}"
+        "python -m vocabaqdata.proc.lexdecis_to_inventory" +
+        " --fmt blp {input} {output}"
 
 
 rule enrich_blp_inventory:

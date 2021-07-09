@@ -47,7 +47,8 @@ rule ecp_to_inventory:
     output:
         ECP_DF
     shell:
-        "python -m vocabaqdata.proc.lexdecis_to_inventory {input} {output}"
+        "python -m vocabaqdata.proc.lexdecis_to_inventory" +
+        " --fmt ecp {input} {output}"
 
 
 rule enrich_ecp_inventory:
