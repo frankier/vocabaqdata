@@ -34,6 +34,6 @@ rule import_testyourvocab:
         "    > {params.unique_native_answers}" +
         " && rm -f {params.unique_native_answers}"
         " && python -m vocabaqdata.importers.testyourvocab_nonnative" +
-        "    {input.nonnative_users} {output.unique_nonnative_answers} {output.db}" +
+        "    {input.nonnative_users} {params.unique_nonnative_answers} {output.db}" +
         " && python -m vocabaqdata.importers.testyourvocab_native " +
-        "    {input.native_users} {output.unique_native_answers} {output.db}"
+        "    {input.native_users} {params.unique_native_answers} {output.db}"
