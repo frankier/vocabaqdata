@@ -1,3 +1,6 @@
+from functools import partial
+
+
 def setup_import(conn):
     conn.execute("""
     PRAGMA memory_limit='4GB';
@@ -6,21 +9,24 @@ def setup_import(conn):
     """)
 
 
-def import_tsv(conn, tbl_name, path, no_header=False, null="NULL"):
+def import_tsv(
+    conn,
+    tbl_name,
+    path,
+    no_header=False,
+    null="NULL",
+    delimiter="\t",
+    quote="",
+):
     header = "0" if no_header else "1"
     print(f"Importing {tbl_name}")
     conn.execute(f"""
     COPY {tbl_name} FROM '{path}'
-    ( DELIMETER '\t', QUOTE '', NULL '{null}', HEADER {header} );
+    ( DELIMETER '{delimiter}', QUOTE '{quote}', NULL '{null}', HEADER {header} );
     """)
 
 
-def import_csv(conn, tbl_name, path):
-    print(f"Importing {tbl_name}")
-    conn.execute(f"""
-    COPY {tbl_name} FROM '{path}'
-    ( DELIMETER ',', QUOTE '"', NULL '', HEADER 1 );
-    """)
+import_csv = partial(import_tsv, delimiter=",")
 
 
 def mk_import_command(filetype="csv", **kwargs):

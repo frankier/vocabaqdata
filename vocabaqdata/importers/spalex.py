@@ -1,15 +1,19 @@
 import click
 import duckdb
 from vocabaqdata.import_tools import import_csv, setup_import
+from functools import partial
+
+
+import_spalex_csv = partial(import_csv, null="NA", quote='"')
 
 
 @click.command()
 @click.argument("word_info_csv", type=click.Path(exists=True))
 @click.argument("lexical_csv", type=click.Path(exists=True))
-@click.argument("users_csv", type=click.Path(exists=True))
+@click.argument("trials_csv", type=click.Path(exists=True))
 @click.argument("sessions_csv", type=click.Path(exists=True))
 @click.argument("db_out", type=click.Path())
-def main(word_info_csv, lexical_csv, users_csv, sessions_csv, db_out):
+def main(word_info_csv, lexical_csv, trials_csv, sessions_csv, db_out):
     conn = duckdb.connect(db_out)
     setup_import(conn)
 
@@ -31,7 +35,7 @@ def main(word_info_csv, lexical_csv, users_csv, sessions_csv, db_out):
     );
     create table lexical (
         trial_id int,
-        exp_id int
+        exp_id int,
         trial_order int,
         spelling varchar,
         lexicality varchar,
@@ -56,13 +60,13 @@ def main(word_info_csv, lexical_csv, users_csv, sessions_csv, db_out):
         exp_id int,
         date timestamp,
         profile_id int
-    }
+    );
     """)
 
-    import_csv(conn, "word_info", word_info_csv)
-    import_csv(conn, "lexical", lexical_csv)
-    import_csv(conn, "trials", trials_csv)
-    import_csv(conn, "sessions", sessions_csv)
+    import_spalex_csv(conn, "word_info", word_info_csv)
+    import_spalex_csv(conn, "lexical", lexical_csv)
+    import_spalex_csv(conn, "trials", trials_csv)
+    import_spalex_csv(conn, "sessions", sessions_csv)
 
 
 if __name__ == "__main__":
