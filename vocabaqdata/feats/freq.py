@@ -56,5 +56,5 @@ def get_word_buckets():
             yield word, idx
 
 
-def add_zipfs(df):
-    df["zipf"] = df["word"].map(partial(zipf_frequency, lang="en"))
+def add_zipfs(df, lang="en"):
+    df["zipf"] = df["word"].map(partial(zipf_frequency, lang=lang))

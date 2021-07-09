@@ -99,4 +99,4 @@ rule enrich_flp_inventory:
     output:
         FLP_INVENTORY_ENRICHED_DF
     shell:
-        "python -m vocabaqdata.proc.add_zipfs {input} {output}"
+        "python -m vocabaqdata.proc.add_zipfs --lang fr {input} {output}"

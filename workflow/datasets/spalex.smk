@@ -55,7 +55,7 @@ rule enrich_spalex_inventory:
     output:
         SPALEX_ENRICHED_DF
     shell:
-        "python -m vocabaqdata.proc.add_zipfs {input} {output}"
+        "python -m vocabaqdata.proc.add_zipfs --lang es {input} {output}"
 
 
 rule import_spalex_all:
