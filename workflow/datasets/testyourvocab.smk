@@ -27,13 +27,13 @@ rule import_testyourvocab:
         "python -m vocabaqdata.importers.testyourvocab_key {input.ranks} {output.db}" +
         " && tail +2 {input.nonnative_answers}" +
         "    | sort -k1n -k2n -u --buffer-size=8G -" + 
-        "    > {params.unique_nonnative_answers}"
-        " && rm -f {params.unique_nonnative_answers}"
+        "    > {params.unique_nonnative_answers}" +
         " && tail +2 {input.native_answers} " + 
         "    | sort -k1n -k2n -u --buffer-size=8G - " +
         "    > {params.unique_native_answers}" +
-        " && rm -f {params.unique_native_answers}"
         " && python -m vocabaqdata.importers.testyourvocab_nonnative" +
         "    {input.nonnative_users} {params.unique_nonnative_answers} {output.db}" +
         " && python -m vocabaqdata.importers.testyourvocab_native " +
-        "    {input.native_users} {params.unique_native_answers} {output.db}"
+        "    {input.native_users} {params.unique_native_answers} {output.db}" +
+        " && rm -f {params.unique_nonnative_answers}" +
+        " && rm -f {params.unique_native_answers}"
