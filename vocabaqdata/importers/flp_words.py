@@ -6,7 +6,9 @@ import pandas
 @click.argument("inf")
 @click.argument("outf")
 def main(inf, outf):
-    pandas.read_excel(inf).to_parquet(outf)
+    df = pandas.read_excel(inf)
+    df["item"] = df["item"].astype("string")
+    df.to_parquet(outf)
 
 
 if __name__ == "__main__":
