@@ -104,7 +104,7 @@ DATASETS = [
     Dataset("TESTYOURVOCAB", rules.import_testyourvocab.output, ["TESTYOURVOCAB_RANKS", "TESTYOURVOCAB_NATIVE_RAW", "TESTYOURVOCAB_NONNATIVE_RAW"]),
     Dataset("ECP", rules.import_ecp.output),
     Dataset("ELP", rules.import_elp.output),
-    Dataset("FLP", rules.import_flp.output),
+    Dataset("FLP", rules.import_flp_db.output),
     Dataset("BLP", rules.import_blp_all.output),
     Dataset("SPALEX", rules.import_spalex_all.output),
     Dataset("WORDBANK", rules.download_and_export_wordbank.output),
