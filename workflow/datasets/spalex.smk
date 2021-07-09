@@ -1,8 +1,8 @@
 SPALEX_URLS = [
-    "https://ndownloader.figshare.com/files/11826623",
-    "https://ndownloader.figshare.com/files/11209613",
-    "https://ndownloader.figshare.com/files/11209610",
-    "https://ndownloader.figshare.com/files/11209607",
+    ("word_info.csv", "https://ndownloader.figshare.com/files/11826623"),
+    ("lexical.csv", "https://ndownloader.figshare.com/files/11209613"),
+    ("users.csv", "https://ndownloader.figshare.com/files/11209610"),
+    ("sessions.csv", "https://ndownloader.figshare.com/files/11209607"),
 ]
 
 cnf("SPALEX_CSVS_DIR", pjoin(WORK, "spalex_csvs"))
@@ -18,10 +18,10 @@ rule download_spalex:
         directory(SPALEX_CSVS_DIR)
     run:
         shell("mkdir -p " + SPALEX_CSVS_DIR)
-        for url in SPALEX_URLS:
+        for name, url in SPALEX_URLS:
             shell(
             "cd " + SPALEX_CSVS_DIR +
-            " && wget --content-disposition -nv " + url
+            " && wget -O " + name + " -nv " + url
             )
 
 
