@@ -40,19 +40,12 @@ def main(db_in, df_out, thresh, fmt):
     if fmt == "blp":
         table = "trials"
         participant = "participant"
-    elif fmt == "ecp":
-        table = "decisions"
-        participant = "exp_id"
-    elif fmt in ("flp", "spalex"):
-        table = "decision_view"
-        participant = "participant"
-    elif fmt == "elp":
-        from vocabaqdata.importers.elp import create_view
-        create_view(conn)
-        table = "decision_view"
-        participant = "participant"
     else:
-        assert False
+        if fmt == "elp":
+            from vocabaqdata.importers.elp import create_view
+            create_view(conn)
+        table = "decision_view"
+        participant = "participant"
     select_query = mk_select(table, participant)
     conn.execute(f"""
     COPY (

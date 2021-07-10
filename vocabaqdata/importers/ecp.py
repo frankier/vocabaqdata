@@ -3,6 +3,20 @@ import duckdb
 from vocabaqdata.import_tools import import_tsv, setup_import
 
 
+def create_view(conn):
+    conn.execute("""
+    create view decision_view as
+    select
+        exp_id as participant,
+        lexicality,
+        response,
+        accuracy,
+        spelling
+    from decisions
+    where spelling is not null;
+    """)
+
+
 @click.command()
 @click.argument("profiles_tsv", type=click.Path(exists=True))
 @click.argument("decisions_tsv", type=click.Path(exists=True))
@@ -57,6 +71,8 @@ def main(profiles_tsv, decisions_tsv, sessions_tsv, db_out):
     import_tsv(conn, "profiles", profiles_tsv, null="")
     import_tsv(conn, "decisions", decisions_tsv, null="")
     import_tsv(conn, "sessions", sessions_tsv, null="")
+
+    create_view(conn)
 
 
 if __name__ == "__main__":
