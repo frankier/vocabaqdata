@@ -27,20 +27,13 @@ rule import_elp:
         "python -m vocabaqdata.importers.elp {input} {output}"
 
 
-rule elp_to_inventory:
+rule elp_inventory:
     input:
         ELP_DF
     output:
-        ELP_INVENTORY_DF
-    shell:
-        "python -m vocabaqdata.proc.lexdecis_to_inventory" +
-        " --fmt elp {input} {output}"
-
-
-rule enrich_elp_inventory:
-    input:
-        ELP_INVENTORY_DF
-    output:
-        ELP_INVENTORY_ENRICHED_DF
-    shell:
-        "python -m vocabaqdata.proc.add_zipfs {input} {output}"
+        df = ELP_INVENTORY_DF,
+        df_enriched = ELP_INVENTORY_ENRICHED_DF
+    params:
+        fmt = "elp"
+    script:
+        "../scripts/enrich.py"

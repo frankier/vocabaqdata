@@ -39,29 +39,13 @@ rule import_spalex:
         "python -m vocabaqdata.importers.spalex {params.word_info} {params.lexical} {params.users} {params.sessions} {output}"
 
 
-rule spalex_to_inventory:
+rule spalex_inventory:
     input:
         SPALEX_DB
     output:
-        SPALEX_DF
-    shell:
-        "python -m vocabaqdata.proc.lexdecis_to_inventory" +
-        " --fmt spalex {input} {output}"
-
-
-rule enrich_spalex_inventory:
-    input:
-        SPALEX_DF
-    output:
-        SPALEX_ENRICHED_DF
-    shell:
-        "python -m vocabaqdata.proc.add_zipfs --lang es {input} {output}"
-
-
-rule import_spalex_all:
-    input:
-        rules.import_spalex.output,
-        rules.spalex_to_inventory.output,
-        rules.enrich_spalex_inventory.output
-    output:
-        touch(pjoin(WORK, ".spalex_all"))
+        df = SPALEX_DF,
+        df_enriched = SPALEX_ENRICHED_DF
+    params:
+        fmt = "spalex"
+    script:
+        "../scripts/enrich.py"

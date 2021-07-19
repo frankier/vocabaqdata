@@ -6,5 +6,8 @@ ECP (English Crowdsourcing Project)	English	Lexical decision	~300-1000 per parti
 ELP (English Lexicon Project)	English	Lexical decision	TODO	TODO	[Repository](https://osf.io/rpx87/)
 BLP (British Lexicon Project)	English	Lexical decision	TODO	TODO	[Departmental website](http://crr.ugent.be/blp/txt/)
 FLP (French Lexicon Project)	French	Lexical decision	TODO	TODO	[Repository](https://osf.io/f8kc4/)
+DCP (Dutch Crowdsourcing Project)	Dutch	Lexical decision	TODO	TODO	[Repository](https://osf.io/5fk8d/)
+DLP (Dutch Lexicon Project)	Dutch	Leixcal decision	TODO	TODO	[Repository]()
+DLP2 (Dutch Lexicon Project 2)	Dutch	Lexical decision	TODO	TODO	[Repository]()
 SPALEX	Spanish	Lexical decision	TODO	TODO	[Repository](https://figshare.com/projects/SPALEX/29722)
 WordBank (Collection of many studies)	Multiple	Multiple	MacArthur-Bates Communicative Development Inventory (MB-CDI)	Children; TODO	[Departmental website](http://wordbank.stanford.edu/) (accessed through public MySQL database, same as the [wordbankr](https://github.com/langcog/wordbankr) package)

@@ -15,12 +15,12 @@ cnf("BLP_ENRICHED_DF", pjoin(WORK, "blp.inventory.enriched.parquet"))
 
 
 rule download_blp:
+    params:
+        urls = BLP_URLS
     output:
         directory(BLP_ZIPS_DIR)
-    run:
-        shell("mkdir -p " + BLP_ZIPS_DIR)
-        for url in BLP_URLS:
-            shell("cd " + BLP_ZIPS_DIR + " && wget -nv " + url)
+    script:
+        "../scripts/download_zips.py"
 
 
 rule extract_blp:
@@ -28,11 +28,8 @@ rule extract_blp:
         BLP_ZIPS_DIR
     output:
         directory(BLP_TSVS_DIR)
-    shell:
-        "input=$(realpath " + BLP_ZIPS_DIR + ")" +
-        " && mkdir -p " + BLP_TSVS_DIR +
-        " && cd " + BLP_TSVS_DIR +
-        " && unzip -o $input/\\*.zip"
+    script:
+        "../scripts/extract_zips.py"
 
 
 rule import_blp:
@@ -49,29 +46,13 @@ rule import_blp:
         "python -m vocabaqdata.importers.blp {params.vocab_items} {params.pseudoword_syllables} {params.stimuli} {params.trials} {output}"
 
 
-rule blp_to_inventory:
+rule blp_inventory:
     input:
         BLP_DB
     output:
-        BLP_DF
-    shell:
-        "python -m vocabaqdata.proc.lexdecis_to_inventory" +
-        " --fmt blp {input} {output}"
-
-
-rule enrich_blp_inventory:
-    input:
-        BLP_DF
-    output:
-        BLP_ENRICHED_DF
-    shell:
-        "python -m vocabaqdata.proc.add_zipfs {input} {output}"
-
-
-rule import_blp_all:
-    input:
-        rules.import_blp.output,
-        rules.blp_to_inventory.output,
-        rules.enrich_blp_inventory.output
-    output:
-        touch(pjoin(WORK, ".blp_all"))
+        df = BLP_DF,
+        df_enriched = BLP_ENRICHED_DF
+    params:
+        fmt = "blp"
+    script:
+        "../scripts/enrich.py"

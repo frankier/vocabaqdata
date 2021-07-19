@@ -41,29 +41,13 @@ rule import_ecp:
         "python -m vocabaqdata.importers.ecp {input.profiles} {input.decisions} {input.sessions} {output}"
 
 
-rule ecp_to_inventory:
+rule ecp_inventory:
     input:
         ECP_DB
     output:
-        ECP_DF
-    shell:
-        "python -m vocabaqdata.proc.lexdecis_to_inventory" +
-        " --fmt ecp {input} {output}"
-
-
-rule enrich_ecp_inventory:
-    input:
-        ECP_DF
-    output:
-        ECP_ENRICHED_DF
-    shell:
-        "python -m vocabaqdata.proc.add_zipfs {input} {output}"
-
-
-rule import_ecp_all:
-    input:
-        rules.import_ecp.output,
-        rules.ecp_to_inventory.output,
-        rules.enrich_ecp_inventory.output
-    output:
-        touch(pjoin(WORK, ".ecp_all"))
+        df = ECP_DF,
+        df_enriched = ECP_ENRICHED_DF
+    params:
+        fmt = "ecp"
+    script:
+        "../scripts/enrich.py"

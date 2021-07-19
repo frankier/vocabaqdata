@@ -96,16 +96,22 @@ include: "datasets/flp.smk"
 include: "datasets/wordbank.smk"
 include: "datasets/blp.smk"
 include: "datasets/spalex.smk"
+include: "datasets/dcp.smk"
+include: "datasets/dlp.smk"
+include: "datasets/dlp2.smk"
 
 
 DATASETS = [
     Dataset("SVL12K", rules.all_svl12k.output, "SVL12K_RAW"),
     Dataset("EVKD1", rules.all_evkd1.output, "EVKD1_RAW"),
     Dataset("TESTYOURVOCAB", rules.import_testyourvocab.output, ["TESTYOURVOCAB_RANKS", "TESTYOURVOCAB_NATIVE_RAW", "TESTYOURVOCAB_NONNATIVE_RAW"]),
-    Dataset("ECP", rules.import_ecp_all.output),
-    Dataset("ELP", rules.enrich_elp_inventory.output),
-    Dataset("FLP", rules.enrich_flp_inventory.output),
-    Dataset("BLP", rules.import_blp_all.output),
-    Dataset("SPALEX", rules.import_spalex_all.output),
+    Dataset("ECP", rules.ecp_inventory.output),
+    Dataset("ELP", rules.elp_inventory.output),
+    Dataset("FLP", rules.flp_inventory.output),
+    Dataset("BLP", rules.blp_inventory.output),
+    Dataset("SPALEX", rules.spalex_inventory.output),
     Dataset("WORDBANK", rules.download_and_export_wordbank.output),
+    Dataset("DCP", rules.dcp_inventory.output),
+    Dataset("DLP", rules.dlp_inventory.output),
+    Dataset("DLP2", rules.dlp2_inventory.output),
 ]

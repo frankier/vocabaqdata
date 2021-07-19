@@ -26,7 +26,9 @@ def mk_select(table, participant):
 @click.option("--thresh", type=float, default=0.95)
 @click.option(
     "--fmt",
-    type=click.Choice(["blp", "ecp", "flp", "spalex", "elp"]),
+    type=click.Choice([
+        "blp", "ecp", "flp", "spalex", "elp", "dlp", "dlp2", "dcp"
+    ]),
     required=True
 )
 def main(db_in, df_out, thresh, fmt):
@@ -37,7 +39,7 @@ def main(db_in, df_out, thresh, fmt):
         )
     else:
         conn = duckdb.connect(db_in)
-    if fmt == "blp":
+    if fmt in ("blp", "dlp"):
         table = "trials"
         participant = "participant"
     else:

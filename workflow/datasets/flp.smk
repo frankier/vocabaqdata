@@ -83,20 +83,13 @@ rule import_flp_db:
         " {input.words} {output}"
 
 
-rule flp_to_inventory:
+rule flp_inventory:
     input:
         FLP_DB
     output:
-        FLP_INVENTORY_DF
-    shell:
-        "python -m vocabaqdata.proc.lexdecis_to_inventory" +
-        " --fmt flp {input} {output}"
-
-
-rule enrich_flp_inventory:
-    input:
-        FLP_INVENTORY_DF
-    output:
-        FLP_INVENTORY_ENRICHED_DF
-    shell:
-        "python -m vocabaqdata.proc.add_zipfs --lang fr {input} {output}"
+        df = FLP_INVENTORY_DF,
+        df_enriched = FLP_INVENTORY_ENRICHED_DF
+    params:
+        fmt = "flp"
+    script:
+        "../scripts/enrich.py"
