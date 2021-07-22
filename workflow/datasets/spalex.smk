@@ -46,6 +46,7 @@ rule spalex_inventory:
         df = SPALEX_DF,
         df_enriched = SPALEX_ENRICHED_DF
     params:
-        fmt = "spalex"
+        fmt = "spalex",
+        lang = "es"
     script:
         "../scripts/enrich.py"

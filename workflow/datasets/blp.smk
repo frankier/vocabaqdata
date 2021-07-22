@@ -53,6 +53,7 @@ rule blp_inventory:
         df = BLP_DF,
         df_enriched = BLP_ENRICHED_DF
     params:
-        fmt = "blp"
+        fmt = "blp",
+        lang = "en"
     script:
         "../scripts/enrich.py"

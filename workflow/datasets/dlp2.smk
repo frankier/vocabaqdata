@@ -49,6 +49,7 @@ rule dlp2_inventory:
         df = DLP2_DF,
         df_enriched = DLP2_ENRICHED_DF
     params:
-        fmt = "dlp2"
+        fmt = "dlp2",
+        lang = "nl"
     script:
         "../scripts/enrich.py"

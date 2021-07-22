@@ -48,6 +48,7 @@ rule ecp_inventory:
         df = ECP_DF,
         df_enriched = ECP_ENRICHED_DF
     params:
-        fmt = "ecp"
+        fmt = "ecp",
+        lang = "en"
     script:
         "../scripts/enrich.py"

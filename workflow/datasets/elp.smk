@@ -34,6 +34,7 @@ rule elp_inventory:
         df = ELP_INVENTORY_DF,
         df_enriched = ELP_INVENTORY_ENRICHED_DF
     params:
-        fmt = "elp"
+        fmt = "elp",
+        lang = "en"
     script:
         "../scripts/enrich.py"

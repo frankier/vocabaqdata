@@ -55,6 +55,7 @@ rule dcp_inventory:
         df = DCP_DF,
         df_enriched = DCP_ENRICHED_DF
     params:
-        fmt = "dcp"
+        fmt = "dcp",
+        lang = "nl"
     script:
         "../scripts/enrich.py"

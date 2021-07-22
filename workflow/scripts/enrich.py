@@ -7,6 +7,6 @@ shell(
     snakemake.input[0] + " " + snakemake.output["df"]
 )
 shell(
-    "python -m vocabaqdata.proc.add_zipfs " + snakemake.output["df"] +
-    " " + snakemake.output["df_enriched"]
+    "python -m vocabaqdata.proc.add_zipfs " + snakemake.params["lang"] +
+    " " + snakemake.output["df"] + " " + snakemake.output["df_enriched"]
 )

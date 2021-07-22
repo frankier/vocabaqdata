@@ -90,6 +90,7 @@ rule flp_inventory:
         df = FLP_INVENTORY_DF,
         df_enriched = FLP_INVENTORY_ENRICHED_DF
     params:
-        fmt = "flp"
+        fmt = "flp",
+        lang = "fr"
     script:
         "../scripts/enrich.py"
