@@ -8,7 +8,7 @@ def mk_select(table, participant):
         {participant} as respondent,
         spelling as word,
         response = 'W' as known,
-        response != 'W' as unknown
+        response != 'W' as unk
     from {table}
     where lexicality = 'W' and {participant} in (
         select {participant}
@@ -17,6 +17,7 @@ def mk_select(table, participant):
         group by {participant}
         having cast(sum(cast(accuracy as int)) as double) / count(*) > ?
     )
+    order by respondent, spelling
     """
 
 
