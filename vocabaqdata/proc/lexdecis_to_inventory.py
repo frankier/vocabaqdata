@@ -50,11 +50,16 @@ def main(db_in, df_out, thresh, fmt):
         table = "decision_view"
         participant = "participant"
     select_query = mk_select(table, participant)
-    conn.execute(f"""
-    COPY (
-    {select_query}
-    ) TO '{df_out}' (FORMAT 'parquet');
-    """, [thresh])
+    df = conn.execute(select_query, [thresh]).fetchdf()
+    df.to_parquet(df_out)
+    # Going via Pandas due to DuckDB bug:
+    # "Parquet export of booleans sometimes exports wrong values"
+    # https://github.com/duckdb/duckdb/issues/1637
+    # conn.execute(f"""
+    # COPY (
+    # {select_query}
+    # ) TO '{df_out}' (FORMAT 'parquet');
+    # """, [thresh])
 
 
 if __name__ == "__main__":
