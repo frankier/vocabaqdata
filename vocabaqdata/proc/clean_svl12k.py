@@ -10,10 +10,7 @@ from ..feats.freq import add_zipfs
 @click.argument("df_out", type=click.Path())
 def main(df_in, df_out):
     df = pandas.read_parquet(df_in)
-    add_zipfs(df)
-    df["known"] = df["score"] >= 5
-    df["unknown"] = df["score"] < 5
-    df.reset_index(drop=True, inplace=True)
+    df = df[(df["respondent"] != 0) & (df["word"] != "cliché")]
     df.to_parquet(df_out)
 
 

@@ -1,12 +1,14 @@
 cnf("SVL12K_RAW", "/does/not/exist")
 cnf("SVL12K_DF", pjoin(WORK, "svl12k.parquet"))
+cnf("SVL12K_CLEAN_DF", pjoin(WORK, "svl12k.clean.parquet"))
 cnf("SVL12K_ENRICHED_DF", pjoin(WORK, "svl12k.enriched.parquet"))
+cnf("SVL12K_CLEAN_ENRICHED_DF", pjoin(WORK, "svl12k.clean.enriched.parquet"))
 cnf("SVL12K_LIST", pjoin(WORK, "svl12k_wordlist.txt"))
 
 
 rule all_svl12k:
     input:
-        SVL12K_DF, SVL12K_LIST, SVL12K_ENRICHED_DF
+        SVL12K_DF, SVL12K_LIST, SVL12K_ENRICHED_DF, SVL12K_CLEAN_DF, SVL12K_CLEAN_ENRICHED_DF
     output:
         touch(pjoin(WORK, ".svl12k_all"))
 
@@ -34,5 +36,23 @@ rule enrich_svl12k:
         SVL12K_DF
     output:
         SVL12K_ENRICHED_DF
+    shell:
+        "python -m vocabaqdata.proc.enrich_svl12k {input} {output}"
+
+
+rule clean_svl12k:
+    input:
+        SVL12K_DF
+    output:
+        SVL12K_CLEAN_DF
+    shell:
+        "python -m vocabaqdata.proc.clean_svl12k {input} {output}"
+
+
+rule enrich_clean_svl12k:
+    input:
+        SVL12K_CLEAN_DF
+    output:
+        SVL12K_CLEAN_ENRICHED_DF
     shell:
         "python -m vocabaqdata.proc.enrich_svl12k {input} {output}"
