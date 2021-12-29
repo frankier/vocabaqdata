@@ -256,7 +256,7 @@ def main(ranks_tsv, db_out):
     import_tsv(conn, "ranks", ranks_tsv)
     import_key(conn, "english_nationalities", NATIONALITY_ENGLISH)
     import_key(conn, "genders", GENDER)
-    import_key(conn, "nationalities", GENDER)
+    import_key(conn, "nationalities", NATIONALITY)
 
 
 if __name__ == "__main__":
